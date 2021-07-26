@@ -4,6 +4,8 @@ BAKKESMOD_PLUGIN(KickoffTimerPlugin, "Kickoff timer plugin", "0.1", PLUGINTYPE_F
 
 static const string savefile = "bakkesmod/data/kickofftimerplugin.data";
 
+bool runTimer = true;
+
 void KickoffTimerPlugin::onLoad()
 {
 	spawnLocations.push_back({ "ML", {256, -3840}, 2.30312 });
@@ -46,8 +48,6 @@ void KickoffTimerPlugin::onHitBall(std::string eventName)
 
 	timeHit = gameWrapper->GetGameEventAsServer().GetSecondsElapsed() - timeStart;
 	hitted = true;
-	if (timeHit < 1.5 || timeHit > 4) 
-		return;
 
 	if (spawn->personalBest == -1) 
 	{
@@ -87,7 +87,6 @@ void KickoffTimerPlugin::onStartedDriving(std::string eventName)
 			timeStart = gameWrapper->GetGameEventAsServer().GetSecondsElapsed();
 		}
 	}
-	
 }
 
 void KickoffTimerPlugin::onReset(std::string eventName)
@@ -110,6 +109,8 @@ void KickoffTimerPlugin::onReset(std::string eventName)
 		}
 		lastMsg = chrono::system_clock::now();
 	}
+
+	runTimer = false;
 }
 
 void KickoffTimerPlugin::Render(CanvasWrapper canvas)
